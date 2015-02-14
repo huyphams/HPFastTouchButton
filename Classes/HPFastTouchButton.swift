@@ -25,7 +25,7 @@ class HPFastTouchButton: UIView {
     }
   }
   
-  var selectedColor: UIColor = UIColor.lightGrayColor()
+  var selectedColor: UIColor = UIColor(red: 217.0/255.0, green: 217.0/255.0, blue: 217.0/255.0, alpha: 1.0)
   
   // Views
   // Private
