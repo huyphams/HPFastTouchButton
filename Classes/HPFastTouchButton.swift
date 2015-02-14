@@ -110,7 +110,7 @@ class HPFastTouchButton: UIView {
     
     for target in targets {
       if let object: AnyObject = target.target {
-        let delay = 10
+        let delay = 0.0
         var time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
         dispatch_after(time, dispatch_get_main_queue(), {
           NSThread.detachNewThreadSelector(target.action, toTarget: object, withObject: object)
@@ -150,7 +150,6 @@ class HPFastTouchButton: UIView {
       }
       
   }
-
   
   func setTitle(title: String?, forState state: UIControlState) {
     
