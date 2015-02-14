@@ -24,17 +24,22 @@ class ViewController: UIViewController, UITableViewDataSource {
     // HP's Fast touch button
     let fastTouchButton = HPFastTouchButton()
     fastTouchButton.addTarget(self, action: Selector("buttonTouched"), forControlEvents: UIControlEvents.TouchUpInside)
+
+    fastTouchButton.setImage(UIImage(named: "camera"), forState: UIControlState.Selected)
+    fastTouchButton.setImage(UIImage(named: "bell"), forState: UIControlState.Normal)
+
     fastTouchButton.backgroundColor = UIColor.whiteColor()
     fastTouchButton.frame = CGRectMake(10, 100, 140, 140)
     fastTouchButton.titleLabel.text = "Fast touch button"
     
     let normalButton = UIButton()
     normalButton.addTarget(self, action: Selector("buttonTouched"), forControlEvents: UIControlEvents.TouchUpInside)
+    normalButton.setImage(UIImage(named: "camera"), forState: UIControlState.Selected)
+    normalButton.setImage(UIImage(named: "bell"), forState: UIControlState.Normal)
     normalButton.backgroundColor = UIColor.whiteColor()
     normalButton.frame = CGRectMake(170, 100, 140, 140)
     normalButton.setTitle("Normal button", forState: UIControlState.Normal)
     normalButton.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-    
     tableView.addSubview(fastTouchButton)
     tableView.addSubview(normalButton)
   }

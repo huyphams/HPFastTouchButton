@@ -12,6 +12,8 @@
 		111E50741A8F0CAC00DD6555 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 111E50731A8F0CAC00DD6555 /* Images.xcassets */; };
 		111E50831A8F0CAC00DD6555 /* HPFastTouchButtonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111E50821A8F0CAC00DD6555 /* HPFastTouchButtonTests.swift */; };
 		111E508E1A8F0D1700DD6555 /* HPFastTouchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111E508D1A8F0D1700DD6555 /* HPFastTouchButton.swift */; };
+		111E50911A8FDA5600DD6555 /* camera@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 111E50901A8FDA5600DD6555 /* camera@3x.png */; };
+		111E50931A8FDC5A00DD6555 /* bell@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 111E50921A8FDC5A00DD6555 /* bell@3x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -34,6 +36,8 @@
 		111E50811A8F0CAC00DD6555 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		111E50821A8F0CAC00DD6555 /* HPFastTouchButtonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HPFastTouchButtonTests.swift; sourceTree = "<group>"; };
 		111E508D1A8F0D1700DD6555 /* HPFastTouchButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HPFastTouchButton.swift; path = Classes/HPFastTouchButton.swift; sourceTree = "<group>"; };
+		111E50901A8FDA5600DD6555 /* camera@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "camera@3x.png"; path = "Resources/camera@3x.png"; sourceTree = "<group>"; };
+		111E50921A8FDC5A00DD6555 /* bell@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bell@3x.png"; path = "Resources/bell@3x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +61,7 @@
 		111E505E1A8F0CAC00DD6555 = {
 			isa = PBXGroup;
 			children = (
+				111E508F1A8FDA4E00DD6555 /* Resources */,
 				111E508C1A8F0CE600DD6555 /* Classes */,
 				111E50691A8F0CAC00DD6555 /* HPFastTouchButton */,
 				111E507F1A8F0CAC00DD6555 /* HPFastTouchButtonTests */,
@@ -115,6 +120,15 @@
 				111E508D1A8F0D1700DD6555 /* HPFastTouchButton.swift */,
 			);
 			name = Classes;
+			sourceTree = "<group>";
+		};
+		111E508F1A8FDA4E00DD6555 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				111E50921A8FDC5A00DD6555 /* bell@3x.png */,
+				111E50901A8FDA5600DD6555 /* camera@3x.png */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -197,6 +211,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				111E50931A8FDC5A00DD6555 /* bell@3x.png in Resources */,
+				111E50911A8FDA5600DD6555 /* camera@3x.png in Resources */,
 				111E50741A8F0CAC00DD6555 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
