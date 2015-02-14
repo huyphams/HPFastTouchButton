@@ -52,7 +52,7 @@ class HPFastTouchButton: UIView {
   
   func commonInit() {
     
-    self.backgroundColor = UIColor.whiteColor()
+    self.backgroundColor = UIColor.clearColor()
     self.initView()
   }
   
@@ -87,6 +87,14 @@ class HPFastTouchButton: UIView {
     
     self.overlayView.backgroundColor = UIColor.clearColor()
     self.triggerSelector()
+    if let nextResponder = self.nextResponder() {
+      nextResponder.touchesEnded(touches, withEvent: event)
+    }
+  }
+  
+  override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
+    
+    self.overlayView.backgroundColor = UIColor.clearColor()
     if let nextResponder = self.nextResponder() {
       nextResponder.touchesEnded(touches, withEvent: event)
     }
