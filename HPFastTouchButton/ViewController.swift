@@ -24,8 +24,7 @@ class ViewController: UIViewController, UITableViewDataSource {
     // HP's Fast touch button
     let fastTouchButton = HPFastTouchButton()
     fastTouchButton.addTarget(self, action: Selector("buttonTouched"), forControlEvents: UIControlEvents.TouchUpInside)
-    fastTouchButton.addTarget(self, action: Selector("buttonToucheda"), forControlEvents: UIControlEvents.TouchUpInside)
-    fastTouchButton.removeTarget(self, action: Selector("buttonToucheda"), forControlEvents: UIControlEvents.TouchUpInside)
+    fastTouchButton.backgroundColor = UIColor.whiteColor()
     fastTouchButton.frame = CGRectMake(10, 100, 140, 140)
     fastTouchButton.titleLabel.text = "Fast touch button"
     
