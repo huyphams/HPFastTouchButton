@@ -9,3 +9,13 @@ Magic is here :")
 ### Use
 
 HPFastTouchButton has the same protocols with UIButton in UIKit.
+
+## Contact
+
+- [@duchuykun@gmail.com](http://facebook.com/huyphams)
+
+If you use/enjoy `HPFastTouchButton`, let me know!
+
+## License
+
+`HPFastTouchButton` is available under the MIT license. See the LICENSE file for more info.
