@@ -253,10 +253,4 @@ class HPFastTouchButton: UIView {
       self.overlayView.alpha = 1.0
     }
   }
-  
-  func debug(message: String, filename: String = __FILE__,
-    function: String = __FUNCTION__, line: Int = __LINE__) {
-      
-      println("💚[\(filename.lastPathComponent):\(line)] \(function) 👉 \(message)")
-  }
 }
