@@ -147,7 +147,7 @@ class HPFastTouchButton: UIView {
         let delay = 0.0
         var time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
         dispatch_after(time, dispatch_get_main_queue(), {
-          NSThread.detachNewThreadSelector(target.action, toTarget: object, withObject: object)
+          NSThread.detachNewThreadSelector(target.action, toTarget: object, withObject: self)
         })
       }
     }
