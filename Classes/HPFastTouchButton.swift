@@ -21,6 +21,12 @@ private class ImageForState {
   var state = UIControlState.Normal
 }
 
+private class TitleForState {
+  
+  var string: NSString?
+  var state = UIControlState.Normal
+}
+
 class HPFastTouchButton: UIView {
   
   // Override super class properties
@@ -52,7 +58,8 @@ class HPFastTouchButton: UIView {
   }
   
   // Class properties
-  private var imageForStateS: [ImageForState] = []
+  private var imagesForState: [ImageForState] = []
+  private var titlesForState: [TitleForState] = []
   private var targets: [Target] = []
   private var currentState = UIControlState.Normal
   
@@ -144,9 +151,7 @@ class HPFastTouchButton: UIView {
     
     for target in targets {
       if let object: AnyObject = target.target {
-        let delay = 0.0
-        var time = dispatch_time(DISPATCH_TIME_NOW, Int64(delay))
-        dispatch_after(time, dispatch_get_main_queue(), {
+        dispatch_async(dispatch_get_main_queue(), { () -> Void in
           NSThread.detachNewThreadSelector(target.action, toTarget: object, withObject: self)
         })
       }
@@ -156,7 +161,7 @@ class HPFastTouchButton: UIView {
   private func imageForState(state: UIControlState) -> UIImage? {
     
     var normalImage: UIImage?
-    for imageForState in self.imageForStateS {
+    for imageForState in self.imagesForState {
       if imageForState.state == state {
         return imageForState.image
       } else if imageForState.state == UIControlState.Normal {
@@ -166,14 +171,37 @@ class HPFastTouchButton: UIView {
     return normalImage
   }
   
-  private func addImageForState(imageForState: ImageForState) {
+  private func titleForState(state: UIControlState) -> String? {
     
-    for (index, imageForStateElement) in enumerate(imageForStateS) {
-      if imageForStateElement.state == imageForState.state {
-        self.imageForStateS.removeAtIndex(index)
+    var normalTitle: String?
+    for titleForState in self.titlesForState {
+      if titleForState.state == state {
+        return titleForState.string
+      } else if titleForState.state == UIControlState.Normal {
+        normalTitle = titleForState.string
       }
     }
-    self.imageForStateS.append(imageForState)
+    return normalTitle
+  }
+  
+  private func addImageForState(imageForState: ImageForState) {
+    
+    for (index, imageForStateElement) in enumerate(imagesForState) {
+      if imageForStateElement.state == imageForState.state {
+        self.imagesForState.removeAtIndex(index)
+      }
+    }
+    self.imagesForState.append(imageForState)
+  }
+  
+  private func addTitleForState(titleForState: TitleForState) {
+    
+    for (index, titleForStateElement) in enumerate(titlesForState) {
+      if titleForStateElement.state == titleForState.state {
+        self.titlesForState.removeAtIndex(index)
+      }
+    }
+    self.titlesForState.append(titleForState)
   }
   
   func addTarget(target: AnyObject?, action: Selector,
@@ -218,7 +246,10 @@ class HPFastTouchButton: UIView {
   
   func setTitle(title: String?, forState state: UIControlState) {
     
-    NSLog("Not supported (Comming soon)... I'm a lazy boy, I need food, I love food, I love milk carrot, it's delicious... ;_;")
+    let titleForState = TitleForState()
+    titleForState.string = title
+    titleForState.state = state
+    self.addTitleForState(titleForState)
   }
   
   override func drawRect(rect: CGRect) {
@@ -237,13 +268,21 @@ class HPFastTouchButton: UIView {
     
     // Change image for state.
     if  self.selected {
+      
       if let image = self.imageForState(UIControlState.Selected) {
         self.imageView.image = image
       } else {
         self.imageView.image = self.imageForState(self.currentState)
       }
+      
+      if let title = self.titleForState(UIControlState.Selected) {
+        self.titleLabel.text = title
+      } else {
+        self.titleLabel.text = self.titleForState(self.currentState)
+      }
     } else {
       self.imageView.image = self.imageForState(self.currentState)
+      self.titleLabel.text = self.titleForState(self.currentState)
     }
     
     // Set overlay alpha.
