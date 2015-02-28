@@ -100,9 +100,6 @@ class HPFastTouchButton: UIView {
     
     self.currentState = UIControlState.Highlighted
     self.setNeedsDisplay()
-    if let nextResponder = self.nextResponder() {
-      nextResponder.touchesBegan(touches, withEvent: event)
-    }
   }
   
   override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
@@ -129,7 +126,7 @@ class HPFastTouchButton: UIView {
     self.currentState = UIControlState.Normal
     self.setNeedsDisplay()
     if let nextResponder = self.nextResponder() {
-      nextResponder.touchesEnded(touches, withEvent: event)
+      nextResponder.touchesCancelled(touches, withEvent: event)
     }
   }
   
