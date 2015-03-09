@@ -49,6 +49,7 @@ class HPFastTouchButton: UIView {
   // Public
   let titleLabel = UILabel()
   var selected: Bool = false
+  var toggle: Bool = false
   
   var enable: Bool = true {
     
@@ -62,6 +63,8 @@ class HPFastTouchButton: UIView {
   private var titlesForState: [TitleForState] = []
   private var targets: [Target] = []
   private var currentState = UIControlState.Normal
+  
+  private var cancelEvent: Bool = false
   
   // Custom init.
   required init(coder aDecoder: NSCoder) {
@@ -90,6 +93,7 @@ class HPFastTouchButton: UIView {
     self.overlayView.userInteractionEnabled =  false
     
     self.titleLabel.backgroundColor = UIColor.clearColor()
+    self.titleLabel.textAlignment = NSTextAlignment.Center
     
     self.addSubview(self.imageView)
     self.addSubview(self.overlayView)
@@ -98,12 +102,14 @@ class HPFastTouchButton: UIView {
   
   override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
     
+    self.cancelEvent = false
     self.currentState = UIControlState.Highlighted
     self.setNeedsDisplay()
   }
   
   override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
     
+    self.cancelEvent = true
     self.currentState = UIControlState.Normal
     self.setNeedsDisplay()
     if let nextResponder = self.nextResponder() {
@@ -115,10 +121,15 @@ class HPFastTouchButton: UIView {
     
     self.currentState = UIControlState.Normal
     self.setNeedsDisplay()
-    self.triggerSelector()
-    if let nextResponder = self.nextResponder() {
-      nextResponder.touchesEnded(touches, withEvent: event)
+    
+    if self.cancelEvent {
+      if let nextResponder = self.nextResponder() {
+        nextResponder.touchesEnded(touches, withEvent: event)
+      }
+    } else {
+      self.triggerSelector()
     }
+    self.cancelEvent = false
   }
   
   override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
@@ -128,6 +139,7 @@ class HPFastTouchButton: UIView {
     if let nextResponder = self.nextResponder() {
       nextResponder.touchesCancelled(touches, withEvent: event)
     }
+    self.cancelEvent = false
   }
   
   private func compareTarget(target1: Target, target2: Target) -> Bool {
@@ -146,6 +158,9 @@ class HPFastTouchButton: UIView {
   
   private func triggerSelector() {
     
+    if self.toggle {
+      self.selected = !self.selected
+    }
     for target in targets {
       if let object: AnyObject = target.target {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
@@ -254,13 +269,17 @@ class HPFastTouchButton: UIView {
     super.drawRect(rect)
     
     // Change background color.
-    switch self.currentState {
-    case UIControlState.Normal:
-      self.overlayView.backgroundColor = UIColor.clearColor()
-    case UIControlState.Highlighted:
+    if self.selected {
       self.overlayView.backgroundColor = self.selectedColor
-    default:
-      self.overlayView.backgroundColor = UIColor.clearColor()
+    } else {
+      switch self.currentState {
+      case UIControlState.Normal:
+        self.overlayView.backgroundColor = UIColor.clearColor()
+      case UIControlState.Highlighted:
+        self.overlayView.backgroundColor = self.selectedColor
+      default:
+        self.overlayView.backgroundColor = UIColor.clearColor()
+      }
     }
     
     // Change image for state.

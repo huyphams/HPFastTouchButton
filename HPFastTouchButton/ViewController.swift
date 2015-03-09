@@ -17,13 +17,15 @@ class ViewController: UIViewController, UITableViewDataSource {
     super.loadView()
     let tableView = UITableView(frame: self.view.bounds)
     tableView.dataSource = self
-    tableView.registerClass(UITableViewCell.classForCoder(), forCellReuseIdentifier: cellIdent)
+    tableView.registerClass(UITableViewCell.classForCoder(),
+      forCellReuseIdentifier: cellIdent)
     tableView.backgroundColor = UIColor.lightGrayColor()
     self.view.addSubview(tableView)
     
-    // HP's Fast touch button
+    // HP's Fast touch button.
     let fastTouchButton = HPFastTouchButton()
-    fastTouchButton.addTarget(self, action: Selector("buttonTouched"), forControlEvents: UIControlEvents.TouchUpInside)
+    fastTouchButton.addTarget(self, action: Selector("buttonTouched"),
+      forControlEvents: UIControlEvents.TouchUpInside)
 
     fastTouchButton.setImage(UIImage(named: "camera"), forState: UIControlState.Selected)
     fastTouchButton.setImage(UIImage(named: "bell"), forState: UIControlState.Normal)
@@ -32,8 +34,10 @@ class ViewController: UIViewController, UITableViewDataSource {
     fastTouchButton.frame = CGRectMake(10, 100, 140, 140)
     fastTouchButton.titleLabel.text = "Fast touch button"
     
+    // Normal button.
     let normalButton = UIButton()
-    normalButton.addTarget(self, action: Selector("buttonTouched"), forControlEvents: UIControlEvents.TouchUpInside)
+    normalButton.addTarget(self, action: Selector("buttonTouched"),
+      forControlEvents: UIControlEvents.TouchUpInside)
     normalButton.setImage(UIImage(named: "camera"), forState: UIControlState.Selected)
     normalButton.setImage(UIImage(named: "bell"), forState: UIControlState.Normal)
     normalButton.backgroundColor = UIColor.whiteColor()
@@ -61,9 +65,11 @@ class ViewController: UIViewController, UITableViewDataSource {
     return 50
   }
   
-  func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+  func tableView(tableView: UITableView, cellForRowAtIndexPath
+    indexPath: NSIndexPath) -> UITableViewCell {
     
-    let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
+    let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+      as UITableViewCell
     cell.textLabel?.text = "This is table view cell"
     cell.backgroundColor = UIColor.lightGrayColor()
     return cell
