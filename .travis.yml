@@ -1,0 +1,10 @@
+language: objective-c
+osx_image: xcode611
+env:
+- LC_CTYPE=en_US.UTF-8 LANG=en_US.UTF-8
+before_install:
+- gem install xcpretty -N
+script:
+- set -o pipefail
+- xcodebuild -project HPFastTouchButton.xcodeproj -scheme "HPFastTouchButton" -sdk iphonesimulator
+- pod lib lint --quick
