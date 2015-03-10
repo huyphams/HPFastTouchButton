@@ -7,4 +7,3 @@ before_install:
 script:
 - set -o pipefail
 - xcodebuild -project HPFastTouchButton.xcodeproj -scheme "HPFastTouchButton" -sdk iphonesimulator
-- pod lib lint --quick
