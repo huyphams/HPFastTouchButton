@@ -6,4 +6,4 @@ before_install:
 - gem install xcpretty -N
 script:
 - set -o pipefail
-- xcodebuild -project HPFastTouchButton.xcodeproj -scheme "HPFastTouchButton" -sdk iphonesimulator
+- xcodebuild -project HPFastTouchButton.xcodeproj -target "HPFastTouchButton" -sdk iphonesimulator
