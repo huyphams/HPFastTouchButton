@@ -31,10 +31,10 @@ class HPFastTouchButton: UIView {
   
   // Override super class properties
   override var frame : CGRect {
+    
     didSet {
-      self.imageView.frame = self.bounds
-      self.overlayView.frame = self.bounds
-      self.titleLabel.frame = self.bounds
+      
+      self.relayoutContent()
     }
   }
   
@@ -50,6 +50,19 @@ class HPFastTouchButton: UIView {
   let titleLabel = UILabel()
   var selected: Bool = false
   var toggle: Bool = false
+  var titleInsets: UIEdgeInsets = UIEdgeInsetsZero {
+    
+    didSet {
+      self.relayoutContent()
+    }
+  }
+  
+  var imageInsets: UIEdgeInsets = UIEdgeInsetsZero {
+    
+    didSet {
+      self.relayoutContent()
+    }
+  }
   
   var enable: Bool = true {
     
@@ -75,7 +88,7 @@ class HPFastTouchButton: UIView {
   override init() {
     
     super.init(frame: CGRectZero)
-    commonInit()
+    self.commonInit()
   }
   
   func commonInit() {
@@ -262,6 +275,21 @@ class HPFastTouchButton: UIView {
     titleForState.string = title
     titleForState.state = state
     self.addTitleForState(titleForState)
+  }
+  
+  func relayoutContent() {
+    
+    // Change views frame
+    self.imageView.frame = CGRectMake(self.imageInsets.left,
+      self.imageInsets.top,
+      CGRectGetWidth(self.bounds) - self.imageInsets.left - self.imageInsets.right,
+      CGRectGetHeight(self.bounds) - self.imageInsets.top - self.imageInsets.bottom)
+    
+    self.overlayView.frame = self.bounds
+    self.titleLabel.frame = CGRectMake(self.titleInsets.left,
+      self.imageInsets.top,
+      CGRectGetWidth(self.bounds) - self.titleInsets.left - self.titleInsets.right,
+      CGRectGetHeight(self.bounds) - self.titleInsets.top - self.titleInsets.bottom)
   }
   
   override func drawRect(rect: CGRect) {
