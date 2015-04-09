@@ -11,8 +11,29 @@ import UIKit
 private class Target {
   
   weak var target: AnyObject?
-  var action = Selector("")
+  var action: Selector!
   var event = UIControlEvents.TouchUpInside
+  
+  func isEqual(target: Target?) -> Bool {
+    
+    if let targetToCompare = target {
+      if let target1: AnyObject = self.target,
+        target2: AnyObject = targetToCompare.target {
+          if target1.isEqual(target2)
+            && self.action == targetToCompare.action
+            && self.event == targetToCompare.event {
+              return true
+          }
+      }
+    }
+    return false
+  }
+  
+  init(target: AnyObject?, action: Selector, event: UIControlEvents) {
+    self.target = target
+    self.action = action
+    self.event = event
+  }
 }
 
 private class ImageForState {
@@ -23,7 +44,7 @@ private class ImageForState {
 
 private class TitleForState {
   
-  var string: NSString?
+  var string: String?
   var state = UIControlState.Normal
 }
 
@@ -50,6 +71,14 @@ class HPFastTouchButton: UIView {
   let titleLabel = UILabel()
   var selected: Bool = false
   var toggle: Bool = false
+  
+  var imageMode: UIViewContentMode = UIViewContentMode.Center {
+    
+    didSet {
+      self.imageView.contentMode = self.imageMode
+    }
+  }
+  
   var titleInsets: UIEdgeInsets = UIEdgeInsetsZero {
     
     didSet {
@@ -85,7 +114,7 @@ class HPFastTouchButton: UIView {
     super.init(coder: aDecoder)
   }
   
-  override init() {
+  init() {
     
     super.init(frame: CGRectZero)
     self.commonInit()
@@ -101,6 +130,7 @@ class HPFastTouchButton: UIView {
     
     self.imageView.backgroundColor = UIColor.clearColor()
     self.imageView.userInteractionEnabled = false
+    self.imageView.contentMode = UIViewContentMode.Center
     
     self.overlayView.backgroundColor = UIColor.clearColor()
     self.overlayView.userInteractionEnabled =  false
@@ -113,31 +143,31 @@ class HPFastTouchButton: UIView {
     self.addSubview(self.titleLabel)
   }
   
-  override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+  override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
     
     self.cancelEvent = false
     self.currentState = UIControlState.Highlighted
     self.setNeedsDisplay()
   }
   
-  override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+  override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
     
     self.cancelEvent = true
     self.currentState = UIControlState.Normal
     self.setNeedsDisplay()
     if let nextResponder = self.nextResponder() {
-      nextResponder.touchesMoved(touches, withEvent: event)
+      nextResponder.touchesMoved(touches as Set<NSObject>, withEvent: event)
     }
   }
   
-  override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+  override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
     
     self.currentState = UIControlState.Normal
     self.setNeedsDisplay()
     
     if self.cancelEvent {
       if let nextResponder = self.nextResponder() {
-        nextResponder.touchesEnded(touches, withEvent: event)
+        nextResponder.touchesEnded(touches as Set<NSObject>, withEvent: event)
       }
     } else {
       self.triggerSelector()
@@ -145,7 +175,7 @@ class HPFastTouchButton: UIView {
     self.cancelEvent = false
   }
   
-  override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
+  override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
     
     self.currentState = UIControlState.Normal
     self.setNeedsDisplay()
@@ -153,20 +183,6 @@ class HPFastTouchButton: UIView {
       nextResponder.touchesCancelled(touches, withEvent: event)
     }
     self.cancelEvent = false
-  }
-  
-  private func compareTarget(target1: Target, target2: Target) -> Bool {
-    
-    if let targetObject1: AnyObject = target1.target {
-      if let targetObject2: AnyObject = target2.target {
-        if targetObject1.isEqual(targetObject2) {
-          if target1.action == target2.action && target1.event == target2.event {
-            return true
-          }
-        }
-      }
-    }
-    return false
   }
   
   private func triggerSelector() {
@@ -232,13 +248,10 @@ class HPFastTouchButton: UIView {
   func addTarget(target: AnyObject?, action: Selector,
     forControlEvents controlEvents: UIControlEvents) {
       
-      let newTarget = Target()
-      newTarget.target = target
-      newTarget.action = action
-      newTarget.event = controlEvents
-      
+      let newTarget = Target(target: target,
+        action: action, event: controlEvents)
       for targetElement in targets {
-        if compareTarget(newTarget, target2: targetElement) {
+        if newTarget.isEqual(targetElement) {
           return
         }
       }
@@ -248,13 +261,10 @@ class HPFastTouchButton: UIView {
   func removeTarget(target: AnyObject?, action: Selector,
     forControlEvents controlEvents: UIControlEvents) {
       
-      let newTarget = Target()
-      newTarget.target = target
-      newTarget.action = action
-      newTarget.event = controlEvents
-      
+      let newTarget = Target(target: target,
+        action: action, event: controlEvents)
       for (index, targetElement) in enumerate(targets) {
-        if compareTarget(newTarget, target2: targetElement) {
+        if newTarget.isEqual(targetElement) {
           targets.removeAtIndex(index)
         }
       }
@@ -277,7 +287,7 @@ class HPFastTouchButton: UIView {
     self.addTitleForState(titleForState)
   }
   
-  func relayoutContent() {
+  private func relayoutContent() {
     
     // Change views frame
     self.imageView.frame = CGRectMake(self.imageInsets.left,
@@ -303,10 +313,8 @@ class HPFastTouchButton: UIView {
       switch self.currentState {
       case UIControlState.Normal:
         self.overlayView.backgroundColor = UIColor.clearColor()
-        break;
       case UIControlState.Highlighted:
         self.overlayView.backgroundColor = self.selectedColor
-        break;
       default:
         self.overlayView.backgroundColor = UIColor.clearColor()
       }
