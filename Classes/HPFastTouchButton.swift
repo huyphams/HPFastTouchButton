@@ -313,8 +313,10 @@ class HPFastTouchButton: UIView {
       switch self.currentState {
       case UIControlState.Normal:
         self.overlayView.backgroundColor = UIColor.clearColor()
+        break
       case UIControlState.Highlighted:
         self.overlayView.backgroundColor = self.selectedColor
+        break
       default:
         self.overlayView.backgroundColor = UIColor.clearColor()
       }
