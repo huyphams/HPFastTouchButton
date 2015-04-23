@@ -69,7 +69,11 @@ class HPFastTouchButton: UIView {
   
   // Public
   let titleLabel = UILabel()
-  var selected: Bool = false
+  var selected: Bool = false {
+    didSet {
+      self.setNeedsDisplay()
+    }
+  }
   var toggle: Bool = false
   
   var imageMode: UIViewContentMode = UIViewContentMode.Center {
