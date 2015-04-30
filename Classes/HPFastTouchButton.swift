@@ -12,7 +12,7 @@ private class Target {
   
   weak var target: AnyObject?
   var action: Selector!
-  var event = UIControlEvents.TouchUpInside
+  var event: UIControlEvents!
   
   func isEqual(target: Target?) -> Bool {
     
@@ -40,12 +40,36 @@ private class ImageForState {
   
   var image: UIImage?
   var state = UIControlState.Normal
+  
+  init(image: UIImage?, state: UIControlState) {
+    
+    self.image = image
+    self.state = state
+  }
 }
 
 private class TitleForState {
   
   var string: String?
   var state = UIControlState.Normal
+  
+  init(string: String?, state: UIControlState) {
+    
+    self.string = string
+    self.state = state
+  }
+}
+
+private class TitleColorForState {
+  
+  var color: UIColor!
+  var state = UIControlState.Normal
+  
+  init(color: UIColor, state: UIControlState) {
+    
+    self.color = color
+    self.state = state
+  }
 }
 
 class HPFastTouchButton: UIView {
@@ -107,6 +131,8 @@ class HPFastTouchButton: UIView {
   // Class properties
   private var imagesForState: [ImageForState] = []
   private var titlesForState: [TitleForState] = []
+  private var titleColorsForState: [TitleColorForState] = []
+  
   private var targets: [Target] = []
   private var currentState = UIControlState.Normal
   
@@ -229,6 +255,19 @@ class HPFastTouchButton: UIView {
     return normalTitle
   }
   
+  private func titleColorForState(state: UIControlState) -> UIColor? {
+    
+    var normalColor: UIColor?
+    for titleColorForState in self.titleColorsForState {
+      if titleColorForState.state == state {
+        return titleColorForState.color
+      } else if titleColorForState.state == UIControlState.Normal {
+        normalColor = titleColorForState.color
+      }
+    }
+    return normalColor
+  }
+  
   private func addImageForState(imageForState: ImageForState) {
     
     for (index, imageForStateElement) in enumerate(imagesForState) {
@@ -247,6 +286,16 @@ class HPFastTouchButton: UIView {
       }
     }
     self.titlesForState.append(titleForState)
+  }
+  
+  private func addTitleColorForState(titleColorForState: TitleColorForState) {
+    
+    for (index, titleColorForStateElement) in enumerate(titleColorsForState) {
+      if titleColorForStateElement.state == titleColorForState.state {
+        self.titleColorsForState.removeAtIndex(index)
+      }
+    }
+    self.titleColorsForState.append(titleColorForState)
   }
   
   func addTarget(target: AnyObject?, action: Selector,
@@ -276,19 +325,23 @@ class HPFastTouchButton: UIView {
   
   func setImage(image: UIImage?, forState state: UIControlState) {
     
-    let imageForState = ImageForState()
-    imageForState.image = image
-    imageForState.state = state
+    let imageForState = ImageForState(image: image, state: state)
     self.addImageForState(imageForState)
   }
   
   
   func setTitle(title: String?, forState state: UIControlState) {
     
-    let titleForState = TitleForState()
-    titleForState.string = title
-    titleForState.state = state
+    let titleForState = TitleForState(string: title, state: state)
     self.addTitleForState(titleForState)
+  }
+  
+  func setTitleColor(color: UIColor?, forState state: UIControlState) {
+    
+    if let colorWrapping = color {
+      let titleColorForState = TitleColorForState(color: colorWrapping, state: state)
+      self.addTitleColorForState(titleColorForState)
+    }
   }
   
   private func relayoutContent() {
@@ -340,9 +393,24 @@ class HPFastTouchButton: UIView {
       } else {
         self.titleLabel.text = self.titleForState(self.currentState)
       }
+      
+      if let titleColor = self.titleColorForState(UIControlState.Selected) {
+        self.titleLabel.textColor = titleColor
+      } else {
+        if let titleColor = self.titleColorForState(self.currentState) {
+          self.titleLabel.textColor = titleColor
+        } else {
+          self.titleLabel.textColor = UIColor.blackColor()
+        }
+      }
     } else {
       self.imageView.image = self.imageForState(self.currentState)
       self.titleLabel.text = self.titleForState(self.currentState)
+      if let titleColor = self.titleColorForState(self.currentState) {
+        self.titleLabel.textColor = titleColor
+      } else {
+        self.titleLabel.textColor = UIColor.blackColor()
+      }
     }
     
     // Set overlay alpha.
