@@ -101,37 +101,45 @@ class HPFastTouchButton: UIView {
   var toggle: Bool = false
   
   var imageMode: UIViewContentMode = UIViewContentMode.Center {
-    
     didSet {
       self.imageView.contentMode = self.imageMode
     }
   }
   
   var titleInsets: UIEdgeInsets = UIEdgeInsetsZero {
-    
     didSet {
       self.relayoutContent()
     }
   }
   
   var imageInsets: UIEdgeInsets = UIEdgeInsetsZero {
-    
     didSet {
       self.relayoutContent()
     }
   }
   
   var enable: Bool = true {
-    
     didSet {
       self.userInteractionEnabled = self.enable
     }
   }
   
   // Class properties
-  private var imagesForState: [ImageForState] = []
-  private var titlesForState: [TitleForState] = []
-  private var titleColorsForState: [TitleColorForState] = []
+  private var imagesForState: [ImageForState] = [] {
+    didSet {
+      self.setNeedsDisplay()
+    }
+  }
+  private var titlesForState: [TitleForState] = [] {
+    didSet {
+      self.setNeedsDisplay()
+    }
+  }
+  private var titleColorsForState: [TitleColorForState] = [] {
+    didSet {
+      self.setNeedsDisplay()
+    }
+  }
   
   private var targets: [Target] = []
   private var currentState = UIControlState.Normal
