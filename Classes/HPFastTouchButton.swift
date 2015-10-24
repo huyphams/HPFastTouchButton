@@ -15,7 +15,6 @@ private class Target {
   var event: UIControlEvents!
   
   func isEqual(target: Target?) -> Bool {
-    
     if let targetToCompare = target {
       if let target1: AnyObject = self.target,
         target2: AnyObject = targetToCompare.target {
@@ -42,7 +41,6 @@ private class ImageForState {
   var state = UIControlState.Normal
   
   init(image: UIImage?, state: UIControlState) {
-    
     self.image = image
     self.state = state
   }
@@ -54,7 +52,6 @@ private class TitleForState {
   var state = UIControlState.Normal
   
   init(string: String?, state: UIControlState) {
-    
     self.string = string
     self.state = state
   }
@@ -66,7 +63,6 @@ private class TitleColorForState {
   var state = UIControlState.Normal
   
   init(color: UIColor, state: UIControlState) {
-    
     self.color = color
     self.state = state
   }
@@ -76,9 +72,7 @@ class HPFastTouchButton: UIView {
   
   // Override super class properties
   override var frame : CGRect {
-    
     didSet {
-      
       self.relayoutContent()
     }
   }
@@ -93,9 +87,10 @@ class HPFastTouchButton: UIView {
   
   // Public
   let titleLabel = UILabel()
+  let wormTitleLabel = HPWormLabel()
   var selected: Bool = false {
     didSet {
-      self.setNeedsDisplay()
+      self.renderButton()
     }
   }
   var toggle: Bool = false
@@ -127,45 +122,40 @@ class HPFastTouchButton: UIView {
   // Class properties
   private var imagesForState: [ImageForState] = [] {
     didSet {
-      self.setNeedsDisplay()
+      self.renderButton()
     }
   }
   private var titlesForState: [TitleForState] = [] {
     didSet {
-      self.setNeedsDisplay()
+      self.renderButton()
     }
   }
   private var titleColorsForState: [TitleColorForState] = [] {
     didSet {
-      self.setNeedsDisplay()
+      self.renderButton()
     }
   }
   
   private var targets: [Target] = []
   private var currentState = UIControlState.Normal
-  
   private var cancelEvent: Bool = false
   
   // Custom init.
-  required init(coder aDecoder: NSCoder) {
-    
+  required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
   }
   
   init() {
-    
     super.init(frame: CGRectZero)
     self.commonInit()
   }
   
   func commonInit() {
-    
     self.backgroundColor = UIColor.clearColor()
     self.initView()
   }
   
   func initView() {
-    
     self.imageView.backgroundColor = UIColor.clearColor()
     self.imageView.userInteractionEnabled = false
     self.imageView.contentMode = UIViewContentMode.Center
@@ -176,36 +166,36 @@ class HPFastTouchButton: UIView {
     self.titleLabel.backgroundColor = UIColor.clearColor()
     self.titleLabel.textAlignment = NSTextAlignment.Center
     
+    self.wormTitleLabel.backgroundColor = UIColor.clearColor()
+    
     self.addSubview(self.imageView)
     self.addSubview(self.overlayView)
     self.addSubview(self.titleLabel)
+    self.addSubview(self.wormTitleLabel)
   }
   
-  override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-    
+  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     self.cancelEvent = false
     self.currentState = UIControlState.Highlighted
-    self.setNeedsDisplay()
+    self.renderButton()
   }
   
-  override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-    
+  override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
     self.cancelEvent = true
     self.currentState = UIControlState.Normal
-    self.setNeedsDisplay()
+    self.renderButton()
     if let nextResponder = self.nextResponder() {
-      nextResponder.touchesMoved(touches as Set<NSObject>, withEvent: event)
+      nextResponder.touchesMoved(touches as Set<UITouch>, withEvent: event)
     }
   }
   
-  override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-    
+  override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
     self.currentState = UIControlState.Normal
-    self.setNeedsDisplay()
+    self.renderButton()
     
     if self.cancelEvent {
       if let nextResponder = self.nextResponder() {
-        nextResponder.touchesEnded(touches as Set<NSObject>, withEvent: event)
+        nextResponder.touchesEnded(touches as Set<UITouch>, withEvent: event)
       }
     } else {
       self.triggerSelector()
@@ -213,10 +203,9 @@ class HPFastTouchButton: UIView {
     self.cancelEvent = false
   }
   
-  override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-    
+  override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
     self.currentState = UIControlState.Normal
-    self.setNeedsDisplay()
+    self.renderButton()
     if let nextResponder = self.nextResponder() {
       nextResponder.touchesCancelled(touches, withEvent: event)
     }
@@ -224,7 +213,6 @@ class HPFastTouchButton: UIView {
   }
   
   private func triggerSelector() {
-    
     if self.toggle {
       self.selected = !self.selected
     }
@@ -238,7 +226,6 @@ class HPFastTouchButton: UIView {
   }
   
   private func imageForState(state: UIControlState) -> UIImage? {
-    
     var normalImage: UIImage?
     for imageForState in self.imagesForState {
       if imageForState.state == state {
@@ -251,7 +238,6 @@ class HPFastTouchButton: UIView {
   }
   
   private func titleForState(state: UIControlState) -> String? {
-    
     var normalTitle: String?
     for titleForState in self.titlesForState {
       if titleForState.state == state {
@@ -264,7 +250,6 @@ class HPFastTouchButton: UIView {
   }
   
   private func titleColorForState(state: UIControlState) -> UIColor? {
-    
     var normalColor: UIColor?
     for titleColorForState in self.titleColorsForState {
       if titleColorForState.state == state {
@@ -277,8 +262,7 @@ class HPFastTouchButton: UIView {
   }
   
   private func addImageForState(imageForState: ImageForState) {
-    
-    for (index, imageForStateElement) in enumerate(imagesForState) {
+    for (index, imageForStateElement) in imagesForState.enumerate() {
       if imageForStateElement.state == imageForState.state {
         self.imagesForState.removeAtIndex(index)
       }
@@ -287,8 +271,7 @@ class HPFastTouchButton: UIView {
   }
   
   private func addTitleForState(titleForState: TitleForState) {
-    
-    for (index, titleForStateElement) in enumerate(titlesForState) {
+    for (index, titleForStateElement) in titlesForState.enumerate() {
       if titleForStateElement.state == titleForState.state {
         self.titlesForState.removeAtIndex(index)
       }
@@ -297,8 +280,7 @@ class HPFastTouchButton: UIView {
   }
   
   private func addTitleColorForState(titleColorForState: TitleColorForState) {
-    
-    for (index, titleColorForStateElement) in enumerate(titleColorsForState) {
+    for (index, titleColorForStateElement) in titleColorsForState.enumerate() {
       if titleColorForStateElement.state == titleColorForState.state {
         self.titleColorsForState.removeAtIndex(index)
       }
@@ -308,7 +290,6 @@ class HPFastTouchButton: UIView {
   
   func addTarget(target: AnyObject?, action: Selector,
     forControlEvents controlEvents: UIControlEvents) {
-      
       let newTarget = Target(target: target,
         action: action, event: controlEvents)
       for targetElement in targets {
@@ -321,10 +302,9 @@ class HPFastTouchButton: UIView {
   
   func removeTarget(target: AnyObject?, action: Selector,
     forControlEvents controlEvents: UIControlEvents) {
-      
       let newTarget = Target(target: target,
         action: action, event: controlEvents)
-      for (index, targetElement) in enumerate(targets) {
+      for (index, targetElement) in targets.enumerate() {
         if newTarget.isEqual(targetElement) {
           targets.removeAtIndex(index)
         }
@@ -332,14 +312,12 @@ class HPFastTouchButton: UIView {
   }
   
   func setImage(image: UIImage?, forState state: UIControlState) {
-    
     let imageForState = ImageForState(image: image, state: state)
     self.addImageForState(imageForState)
   }
   
   
   func setTitle(title: String?, forState state: UIControlState) {
-    
     let titleForState = TitleForState(string: title, state: state)
     self.addTitleForState(titleForState)
   }
@@ -353,7 +331,6 @@ class HPFastTouchButton: UIView {
   }
   
   private func relayoutContent() {
-    
     // Change views frame
     self.imageView.frame = CGRectMake(self.imageInsets.left,
       self.imageInsets.top,
@@ -365,12 +342,11 @@ class HPFastTouchButton: UIView {
       self.imageInsets.top,
       CGRectGetWidth(self.bounds) - self.titleInsets.left - self.titleInsets.right,
       CGRectGetHeight(self.bounds) - self.titleInsets.top - self.titleInsets.bottom)
+    self.wormTitleLabel.frame = self.titleLabel.frame
   }
   
-  override func drawRect(rect: CGRect) {
-    
-    super.drawRect(rect)
-    
+  
+  func renderButton() {
     // Change background color.
     if self.selected {
       self.overlayView.backgroundColor = self.selectedColor
@@ -389,7 +365,6 @@ class HPFastTouchButton: UIView {
     
     // Change image for state.
     if  self.selected {
-      
       if let image = self.imageForState(UIControlState.Selected) {
         self.imageView.image = image
       } else {
@@ -411,6 +386,7 @@ class HPFastTouchButton: UIView {
           self.titleLabel.textColor = UIColor.blackColor()
         }
       }
+      
     } else {
       self.imageView.image = self.imageForState(self.currentState)
       self.titleLabel.text = self.titleForState(self.currentState)
@@ -422,7 +398,7 @@ class HPFastTouchButton: UIView {
     }
     
     // Set overlay alpha.
-    if let image = self.imageView.image {
+    if self.imageView.image != nil {
       self.overlayView.alpha = 0.6
     } else {
       self.overlayView.alpha = 1.0

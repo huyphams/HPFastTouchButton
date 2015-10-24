@@ -14,6 +14,7 @@
 		111E508E1A8F0D1700DD6555 /* HPFastTouchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111E508D1A8F0D1700DD6555 /* HPFastTouchButton.swift */; };
 		111E50911A8FDA5600DD6555 /* camera@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 111E50901A8FDA5600DD6555 /* camera@3x.png */; };
 		111E50931A8FDC5A00DD6555 /* bell@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 111E50921A8FDC5A00DD6555 /* bell@3x.png */; };
+		113D32B61BDB396D0007C377 /* HPWormLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113D32B51BDB396D0007C377 /* HPWormLabel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		111E508D1A8F0D1700DD6555 /* HPFastTouchButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HPFastTouchButton.swift; path = Classes/HPFastTouchButton.swift; sourceTree = "<group>"; };
 		111E50901A8FDA5600DD6555 /* camera@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "camera@3x.png"; path = "Resources/camera@3x.png"; sourceTree = "<group>"; };
 		111E50921A8FDC5A00DD6555 /* bell@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bell@3x.png"; path = "Resources/bell@3x.png"; sourceTree = "<group>"; };
+		113D32B51BDB396D0007C377 /* HPWormLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HPWormLabel.swift; path = Classes/HPWormLabel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 			isa = PBXGroup;
 			children = (
 				111E508D1A8F0D1700DD6555 /* HPFastTouchButton.swift */,
+				113D32B51BDB396D0007C377 /* HPWormLabel.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -175,7 +178,8 @@
 		111E505F1A8F0CAC00DD6555 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0610;
+				LastSwiftUpdateCheck = 0710;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = CoreDump;
 				TargetAttributes = {
 					111E50661A8F0CAC00DD6555 = {
@@ -232,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				111E506F1A8F0CAC00DD6555 /* ViewController.swift in Sources */,
+				113D32B61BDB396D0007C377 /* HPWormLabel.swift in Sources */,
 				111E506D1A8F0CAC00DD6555 /* AppDelegate.swift in Sources */,
 				111E508E1A8F0D1700DD6555 /* HPFastTouchButton.swift in Sources */,
 			);
@@ -276,6 +281,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -340,6 +346,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = HPFastTouchButton/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "coredump.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -351,6 +358,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = HPFastTouchButton/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "coredump.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -369,6 +377,7 @@
 				);
 				INFOPLIST_FILE = HPFastTouchButtonTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "coredump.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HPFastTouchButton.app/HPFastTouchButton";
 			};
@@ -384,6 +393,7 @@
 				);
 				INFOPLIST_FILE = HPFastTouchButtonTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "coredump.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/HPFastTouchButton.app/HPFastTouchButton";
 			};
